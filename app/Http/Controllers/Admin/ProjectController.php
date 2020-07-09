@@ -95,37 +95,10 @@ class ProjectController extends Controller
             }
         }
 
-//        if ($newSafeCount && $newSafeName && $newSafeType && $newSafeUse && ($newSafeUse <= $newSafeCount)) {
-//            $newSafe = Sklad::create([
-//                'name' =>$newSafeName,
-//                'type' => $newSafeType,
-//                'in' => ($newSafeCount - $newSafeUse),
-//                'out' => $newSafeUse
-//            ]);
-//
-//            $project->safes()->attach($newSafe->id);
-//        }
-//
-//        if ($request->get('safe_detail')) {
-//            $this->addProductToProject($request->get('safe_detail'), $request->get('safe_detail_count'), $project);
-//        }
-//
-//        if ($request->get('safe_material')) {
-//            $this->addProductToProject($request->get('safe_material'), $request->get('safe_material_count'), $project);
-//        }
-//
-//        if ($request->get('safe_purchased')) {
-//            $this->addProductToProject($request->get('safe_purchased'), $request->get('safe_purchased_count'), $project);
-//        }
-
         $path = public_path().'/uploads/projects/' . $project->files_path;
         if(!File::isDirectory($path)){
             File::makeDirectory($path, 0777, true, true);
         }
-
-//        if ($request->file('files')) {
-//            $this->createFiles($request->file('files'), $project, $request->get('file_types'));
-//        }
 
         return redirect()->route('projects.index');
     }
@@ -145,9 +118,9 @@ class ProjectController extends Controller
             ->findOrFail($id);
         $files = $project->files;
 
-        // $users = $request->get('users');
+        $users = User::role(['Программист', 'Конструктор\АСУ'])->get();
 
-        return view('admin.project.show', compact('project', 'files'));
+        return view('admin.project.show', compact('project', 'files', 'users',));
     }
 
     /**

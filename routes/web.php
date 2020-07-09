@@ -39,6 +39,7 @@ Route::group(['prefix' => 'kh-admin', 'middleware' => ['role:Администр�
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectController');
     Route::resource('sklad', 'SkladController');
+    Route::resource('contragent', 'ContragentController');
 
     Route::get('download/{name}/{project}', 'ProjectController@downloadFile')->name('admin.download');
     Route::post('add-file/{project}', 'ProjectController@uploadFile')->name('admin.add.file');

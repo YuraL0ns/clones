@@ -28,6 +28,16 @@
                                     <label for="inputQuest">Задача проекта(общая)</label>
                                     <textarea id="inputQuest" class="form-control" rows="4" name="quest"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="inputContragent">Заказчик</label>
+                                    <select class="form-control" id="inputContragent">
+                                      <option>Контрагент 1</option>
+                                      <option>Контрагент 2</option>
+                                      <option>Контрагент 3</option>
+                                      <option>Контрагент 4</option>
+                                      <option>Контрагент 5</option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -41,11 +51,11 @@
                             <div class="card-body">                                   
                                 <div class="form-group">
                                     <label for="inputEstimatedDuration">Начало и конец проекта</label>
-                                    <div class="form-group row d-flex justify-content-between">
+                                        <div class="form-group row d-flex justify-content-between">
                                         с <input type="date" id="inputName" class="form-control" name="start"> 
                                         до
                                         <input type="date" id="inputName" class="form-control" name="end">
-                                    </div>
+                                   </div>
                                     <label for="inputEstimatedDuration">Время для проектирования</label>
                                     <div class="form-group row d-flex justify-content-between">
                                         с <input type="date" id="inputName" class="form-control" name="ps"> 
@@ -71,7 +81,7 @@
                         <!-- /.card -->
                     </div>
                 </div>
-                <div class="row">
+                {{--  <div class="row">
                     <div class="col-12">
                         <div class="card card-secondary">
                             <div class="card-header">
@@ -100,8 +110,8 @@
                         </div>
                         <!-- /.card -->
                     </div>
-                </div>
-                <div class="row">
+                </div>--}}
+                <div class="row mt-3">
                     <div class="col-12">
                         <a href="{{ route('projects.index') }}" class="btn btn-secondary">Отмена</a>
                         <input type="submit" value="Создать проект" class="btn btn-success float-right">

@@ -78,6 +78,16 @@
     </li>
     @endcan
 
+    @role('Директор|Администратор')
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('contragent.index') }}">
+            <i class="fas fa-project-diagram"></i>
+            <span>Контрагенты</span>
+        </a>
+    </li>
+
+    @endrole
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

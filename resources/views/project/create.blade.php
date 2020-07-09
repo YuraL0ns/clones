@@ -32,14 +32,6 @@
                                     <label for="inputQuest">Задача проекта(общая)</label>
                                     <textarea id="inputQuest" class="form-control" rows="4" name="quest"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputClientCompany">Заказчик(опционально)</label>
-                                    <input type="text" id="inputClientCompany" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputProjectLeader">Кто глава проекта</label>
-                                    <input type="text" id="inputProjectLeader" class="form-control">
-                                </div>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -83,7 +75,7 @@
                         <!-- /.card -->
                     </div>
                 </div>
-                <div class="row">
+               {{-- <div class="row">
                     <div class="col-12">
                         <div class="card card-secondary">
                             <div class="card-header">
@@ -114,7 +106,7 @@
                         </div>
                         <!-- /.card -->
                     </div>
-                </div>
+                </div>--}}
                 {{--<div class="row">--}}
                     {{--@can('create file')--}}
                     {{--<div class="col-6">--}}
@@ -180,7 +172,7 @@
                     {{--</div>--}}
                     {{--@endrole--}}
                 {{--</div>--}}
-                <div class="row">
+                {{--<div class="row">
                     <div class="col-6">
                         <div class="card card-secondary">
                             <div class="card-header">
@@ -211,7 +203,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
                 <div class="row">
                     <div class="col-12">
                         <a href="{{ route('projects.index') }}" class="btn btn-secondary">Отмена</a>

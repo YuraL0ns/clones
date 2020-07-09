@@ -73,7 +73,11 @@
                                       <label for="inputUser">Выбор пользователя</label>
                                       <select id="inputUser" class="form-control">
                                         <option selected>--- Список с пользователями в нутри ---</option>
-                                        <option>Вания</option>
+                                        <option>
+                                        @foreach($users -> $users)
+                                            {{ $users->name }}
+                                        @endforeach
+                                        </option>
                                       </select>
                                     </div>
                                     <div class="form-group">
@@ -305,9 +309,56 @@
             <!-- /.card-body -->
              <h3>Складирование</h3>
              <hr>
-             <table class="table table-bordered">
-                 
-             </table>
+             <div class="row">
+                 <div class="col-4">
+                    <span class="badge badge-info mb-2">Металопрокат</span>
+                     <table class="table table-bordered">
+                         <thead>
+                             <th>Наименование</th>
+                             <th>Количество</th>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Лист 6*30</td>
+                                 <td>20 .м</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <div class="col-4">
+                    <span class=" badge badge-info mb-2">Детали</span>
+                     <table class="table table-bordered">
+                         <thead>
+                             <th>Код</th>
+                             <th>Наименование</th>
+                             <th>Количество</th>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>00101</td>
+                                 <td>Гвоздь</td>
+                                 <td>300 .шт</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <div class="col-4">
+                    <span class="badge badge-info mb-2">Расходные детали</span>
+                     <table class="table table-bordered">
+                         <thead>
+                             <th>Наименование</th>
+                             <th>Количество</th>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Шайба 100*500</td>
+                                 <td>100500 .шт</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+             
         </div>
     </div>
 @endsection
