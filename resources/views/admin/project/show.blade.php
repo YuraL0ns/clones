@@ -74,9 +74,7 @@
                                       <select id="inputUser" class="form-control">
                                         <option selected>--- Список с пользователями в нутри ---</option>
                                         <option>
-                                        @foreach($users -> $users)
-                                            {{ $users->name }}
-                                        @endforeach
+                                        
                                         </option>
                                       </select>
                                     </div>
@@ -165,14 +163,14 @@
                                 @csrf
                                 <div class="form-group file-input row">
                                     <div class="form-group col-6">
-                                        <label for="project-add-file-show">Upload File</label>
+                                        <label for="project-add-file-show">Загрузка файла</label>
                                         <input type="file" id="project-add-file-show" class="form-control" name="file">
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="file-type-show">File Type</label>
+                                        <label for="file-type-show">Тип загружаемого фала</label>
                                         <select id="file-type-show" class="form-control" name="file_type">
                                             <option value="drawing">Чертеж</option>
-                                            <option value="report">отчет</option>
+                                            <option value="report">Отчет</option>
                                             <option value="document">Документ</option>
                                         </select>
                                     </div>
@@ -201,11 +199,26 @@
                                 </button>
                               </div>
                               <div class="modal-body">
+                                <a href="#" class="btn btn-sm btn-success">Добавить</a>
+                                <table class="table">
+                                    <tr class="col-md-12">
+                                      <td>
+                                                <label for="-type-show">Что добавляем</label>
+                                                <select id="-type-show" class="form-control" name="">
+                                                    <option value="drawing">Список всех наименований на складе</option>
+                                                </select>
+                                      </td>
+                                      <td> <label for="-type-show">Кол-во</label>
+                                           <input type="text" class="form-control" placeholder="Кол-во">
+                                      </td>
+                                    </tr>
+                                </table>
+                                <div class="clearfix">&nbsp;</div>
                                 <table class="table table-bordered datatable">
                                     <thead>
                                         <th>Код</th>
                                         <th>Наименование</th>
-                                        <th>Колличество</th>
+                                        <th>Количество</th>
                                         <th colspan="2">Наличие</th>
                                     </thead>
                                     <tbody>
@@ -285,14 +298,14 @@
                                 @csrf
                                 <div class="form-group file-input row">
                                     <div class="form-group col-6">
-                                        <label for="project-add-file-show">Upload File</label>
+                                        <label for="project-add-file-show">Загрузуть файл</label>
                                         <input type="file" id="project-add-file-show" class="form-control" name="file">
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="file-type-show">File Type</label>
+                                        <label for="file-type-show">Тип файла</label>
                                         <select id="file-type-show" class="form-control" name="file_type">
                                             <option value="drawing">Чертеж</option>
-                                            <option value="report">отчет</option>
+                                            <option value="report">Отчет</option>
                                             <option value="document">Документ</option>
                                         </select>
                                     </div>
