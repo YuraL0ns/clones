@@ -29,6 +29,8 @@ class AddRelationProjectWithComments extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropForeign(['project_id']);
+        });
     }
 }
