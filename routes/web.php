@@ -30,6 +30,11 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('project/{project}/comments', 'CommentsController@store');
+Route::post('project/{project_id}/storeTask', 'ProjectController@storeTask');
+Route::get('project/{project_id}/task/{task_id}/done', 'ProjectController@taskDone')->name('taskDone');
+Route::post('project/{project_id}/task/{task_id}/addFile', 'ProjectController@taskAddFile')->name('taskAddFile');
+Route::get('project/{project_id}/task/{task_id}/downloadFile/{file_id}', 'ProjectController@downloadTaskFile')->name('downloadTaskFile');
+Route::post('project/{project_id}/task/{task_id}/editTaskSklads', 'ProjectController@editTaskSklads')->name('editTaskSklads');
 
 Route::group(['prefix' => 'kh-admin', 'middleware' => ['role:Администратор|Директор'], 'namespace' => 'Admin'], function () {
     Route::get('dashboard', 'AccountController@dashboard')->name('admin.dashboard.main');

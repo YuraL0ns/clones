@@ -27,7 +27,7 @@ class Project extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'project_id', 'id');
     }
 
     public function status()

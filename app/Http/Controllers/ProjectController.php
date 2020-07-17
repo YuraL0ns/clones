@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectStoreRequest;
+use App\Models\TaskHasFiles;
+use App\Models\TaskHasSklads;
 use App\Sklad;
 use App\Task;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Project;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -170,8 +174,12 @@ class ProjectController extends Controller
             ->with('tasks')
             ->with('owners')
             ->with('safes')
+            ->with('comments')
             ->findOrFail($id);
         $safes = Sklad::get();
+
+        $users = User::orderBy('last_name', 'asc')->get();
+        $sklads = Sklad::orderBy('name', 'asc')->get();
 
         $files = $project->files;
         if (!in_array('Бухгалтер', $auth->getRoleNames()->toArray())) {
@@ -183,7 +191,7 @@ class ProjectController extends Controller
             });
         }
 
-        return view('project.show', compact('project', 'files', 'safes'));
+        return view('project.show', compact('project', 'files', 'safes', 'users', 'sklads'));
     }
 
     /**
@@ -387,4 +395,162 @@ class ProjectController extends Controller
             ]);
         }
     }
+
+    /**
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeTask(Request $request, $project_id)
+    {
+        $project = Project::findOrFail($project_id);
+
+        $validator = Validator::make($request->post(),[
+            'task_user_id' => 'required|exists:users,id',
+            'task_description'  => 'required',
+            'task_date_from' => 'nullable',
+            'task_date_to' => 'nullable',
+        ]);
+
+        if($validator->fails())
+        {
+            return back()->withErrors($validator->errors()->all());
+        }
+
+        $payload = $validator->validated();
+        Task::create([
+            'project_id' => $project->id,
+            'user_id' => $payload['task_user_id'],
+            'descriptions' => $payload['task_description'],
+            'start_date' => $payload['task_date_from'],
+            'end_date' => $payload['task_date_to'],
+        ]);
+        return back();
+    }
+
+    /**
+     * @param $project_id
+     * @param $task_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function taskDone($project_id, $task_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $task = Task::where('project_id', $project->id)->findOrFail($task_id);
+
+        $task->update([
+            'done' => true,
+        ]);
+
+        return redirect('/project/' . $project->id);
+    }
+
+    /**
+     * @param Request $request
+     * @param $project_id
+     * @param $task_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function taskAddFile(Request $request, $project_id, $task_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $task = Task::where('project_id', $project->id)->findOrFail($task_id);
+
+        $request->validate([
+            'file' => ['required', 'mimes:jpg,jpeg,png,pdf,docx', 'max:894096'],
+        ]);
+
+        $file = $request->file('file');
+
+        $filename = explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now()->timestamp . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('/uploads/tasks/' . $task->id), $filename);
+
+        TaskHasFiles::create([
+            'task_id' => $task->id,
+            'name' => $filename,
+        ]);
+
+        return redirect()->back();
+    }
+
+    /**
+     * @param $project_id
+     * @param $task_id
+     * @param $file_id
+     * @return \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadTaskFile($project_id, $task_id, $file_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $task = Task::findOrFail($task_id);
+        $file = TaskHasFiles::findOrFail($file_id);
+
+        $filePath = public_path(). "/uploads/tasks/".$task->id.'/'.$file->name;
+
+        if (File::exists($filePath)) {
+            return response()->download($filePath);
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * @param Request $request
+     * @param $project_id
+     * @param $task_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function editTaskSklads(Request $request, $project_id, $task_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $task = Task::findOrFail($task_id);
+        $validate = Validator::make($request->post(),
+        [
+            'in_stock' => 'nullable|array',
+            'to_purchase' => 'nullable|array',
+        ]);
+
+        if($validate->fails()){
+            return back()->withErrors($validate->errors()->all());
+        }
+
+        $payload = $validate->validate();
+        DB::table('task_has_sklads')->where('task_id', $task->id)->update(['in_stock' => false]);
+        if(isset($payload['in_stock'])) {
+            foreach (array_keys($payload['in_stock']) as $sklad_id){
+                if($taskHasSklad = TaskHasSklads::where('task_id', $task->id)->where('sklad_id', $sklad_id)->first()){
+                    $taskHasSklad->update([
+                        'in_stock' => true,
+                    ]);
+                }else{
+                    TaskHasSklads::create([
+                        'task_id' =>  $task->id,
+                        'sklad_id'=>  $sklad_id,
+                        'in_stock' => true,
+                    ]);
+                }
+            }
+        }
+
+        DB::table('task_has_sklads')->where('task_id', $task->id)->update(['to_purchase' => false]);
+        if(isset($payload['to_purchase'])) {
+            foreach (array_keys($payload['to_purchase']) as $sklad_id){
+                if($taskHasSklad = TaskHasSklads::where('task_id', $task->id)->where('sklad_id', $sklad_id)->first()){
+                    $taskHasSklad->update([
+                        'to_purchase' => true,
+                    ]);
+                }else{
+                    TaskHasSklads::create([
+                        'task_id' =>  $task->id,
+                        'sklad_id'=>  $sklad_id,
+                        'to_purchase' => true,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back();
+    }
+
+
+
 }
