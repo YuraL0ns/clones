@@ -15,8 +15,8 @@ class CreateTaskHasSkladsTable extends Migration
     {
         Schema::create('task_has_sklads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('task_id');
-            $table->bigInteger('sklad_id');
+            $table->unsignedBigInteger('task_id');
+            $table->unsignedBigInteger('sklad_id');
             $table->boolean('in_stock')->default(false);
             $table->boolean('to_purchase')->default(false);
             $table->timestamps();

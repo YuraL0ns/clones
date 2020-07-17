@@ -15,7 +15,7 @@ class CreateTaskHasFilesTable extends Migration
     {
         Schema::create('task_has_files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('task_id');
+            $table->unsignedBigInteger('task_id');
             $table->string('name');
             $table->timestamps();
 
