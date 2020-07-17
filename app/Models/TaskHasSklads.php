@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Sklad;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskHasSklads extends Model
@@ -14,4 +15,12 @@ class TaskHasSklads extends Model
         'in_stock',
         'to_purchase',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function sklad()
+    {
+        return $this->hasOne(Sklad::class, 'id', 'sklad_id');
+    }
 }

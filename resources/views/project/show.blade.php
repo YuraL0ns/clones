@@ -222,7 +222,8 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form method="POST" action="{{route('editTaskSklads', ['project_id' => $project->id, 'task_id' => $task->id])}}">
+                                            <form method="POST"
+                                                  action="{{route('editTaskSklads', ['project_id' => $project->id, 'task_id' => $task->id])}}">
                                                 @csrf
                                                 <table class="table table-bordered datatable">
                                                     <thead>
@@ -356,27 +357,24 @@
                 <h3>Складирование</h3>
                 <hr>
                 <div class="row">
-                    <table class="col-4 table table-bordered">
-                        <thead>
-                        <th>Код</th>
-                        <th>Наименование</th>
-                        <th>Количество</th>
-                        </thead>
-                    </table>
-                    <table class="col-4 table table-bordered">
-                        <thead>
-                        <th>Код</th>
-                        <th>Наименование</th>
-                        <th>Количество</th>
-                        </thead>
-                    </table>
-                    <table class="col-4 table table-bordered">
-                        <thead>
-                        <th>Код</th>
-                        <th>Наименование</th>
-                        <th>Количество</th>
-                        </thead>
-                    </table>
+                    @foreach($project->tasks as $task)
+                        @foreach($task->hasSklads as $HaSsklad)
+                            <table class="col-4 table table-bordered">
+                                <thead>
+                                <th>Код</th>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{$HaSsklad->sklad->id}}</td>
+                                    <td>{{$HaSsklad->sklad->name}} ({{$HaSsklad->sklad->type}})</td>
+                                    <td>{{$HaSsklad->sklad->out}}/{{$HaSsklad->sklad->in}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
         </div>
